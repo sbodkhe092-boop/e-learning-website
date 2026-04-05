@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CodeLearn Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#047857">
+  <style>
+    :root {
+      --bg-dark: #0d0e12;
+      --sidebar-dark: #121317;
+      --card-dark: #1a1b1f;
+      --accent-green: #047857;
+      --text-gray: #9ca3af;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: var(--sidebar-dark);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 10px;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-item.active {
+      background: var(--accent-green);
+      color: white;
+    }
+
+    .streak-ring {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+
+    .streak-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .streak-ring circle {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: round;
+    }
+
+    .streak-ring .bg {
+      stroke: #25262b;
+    }
+
+    .streak-ring .progress {
+      stroke: #f97316;
+      stroke-dasharray: 314;
+      stroke-dashoffset: 80;
+      transition: stroke-dashoffset 1s ease;
+    }
+
+    .card-hover:hover {
+      border-color: rgba(16, 185, 129, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .glass-header {
+      background: rgba(13, 14, 18, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+   #overlay.active {
+  display: block;
+}
+   /* ================= FINAL MOBILE RESPONSIVE ================= */
+@media (max-width: 768px) {
+
+  /* Sidebar hidden by default */
+  aside {
+    transform: translateX(-100%);
+    transition: 0.3s;
+  }
+
+  aside.active {
+    transform: translateX(0);
+  }
+
+  /* Main full width */
+  main {
+    margin-left: 0 !important;
+    padding: 16px !important;
+  }
+
+  /* Header fix */
+  header {
+    left: 0 !important;
+    width: 100% !important;
+    padding: 0 16px !important;
+  }
+
+  /* Search full width */
+  header .w-1\/2 {
+    width: 100% !important;
+  }
+
+  /* Layout vertical */
+  .mt-16.flex {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Right column */
+  .w-80 {
+    width: 100% !important;
+  }
+
+  /* Grids */
+  .grid-cols-4,
+  .grid-cols-3 {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Hero section */
+  section.flex {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  /* Fix padding */
+  .p-10 {
+    padding: 20px !important;
+  }
+
+  /* Buttons */
+  button {
+    width: 100%;
+  }
+
+  /* Heading */
+  h1 {
+    font-size: 24px !important;
+  }
+
+}
+@media (max-width: 768px) {
+
+  header {
+    display: flex;
+    gap: 10px;
+  }
+
+  header .w-1\/2 {
+    width: 100% !important;
+  }
+
+  header input {
+    font-size: 14px;
+    padding: 10px 12px 10px 40px;
+  }
+
+}
+@media (max-width: 768px) {
+
+  header {
+    left: 0 !important;
+    padding: 10px !important;
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+  }
+
+  header .relative {
+    width: 100% !important;
+  }
+
+  header input {
+    width: 100%;
+  }
+
+}
+  </style>
+</head>
+
+<body class="flex min-h-screen">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="w-64 bg-[#121317] border-r border-white/5 flex flex-col fixed h-full z-50 transition-all duration-300">
+    <div class="p-6 mb-4">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+          <i class="fas fa-play text-white text-xs"></i>
+        </div>
+        <span class="text-xl font-bold tracking-tight">Sneha</span>
+      </div>
+      <p class="text-[10px] text-gray-500 mt-1 uppercase tracking-widest ml-10">E-Learning  🔥</p>
+    </div>
+
+    <nav class="flex-1 px-4 space-y-1 custom-scrollbar overflow-y-auto">
+      <div class="text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-2 px-2">Main</div>
+      <a href="#" class="nav-item active flex items-center gap-3 px-4 py-3 rounded-xl transition-all">
+        <i class="fas fa-home w-5"></i>
+        <span class="text-sm font-medium">Dashboard</span>
+      </a>
+
+      <div class="text-[10px] font-bold text-gray-600 uppercase tracking-widest mt-6 mb-2 px-2">Learn</div>
+      <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400">
+        <i class="fas fa-book-open w-5"></i>
+        <span class="text-sm font-medium">Courses</span>
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400">
+        <i class="fas fa-check-square w-5"></i>
+        <span class="text-sm font-medium">Practice</span>
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400">
+        <i class="fas fa-tasks w-5"></i>
+        <span class="text-sm font-medium">Quizzes</span>
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400">
+        <i class="fas fa-folder w-5"></i>
+        <span class="text-sm font-medium">Projects</span>
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400">
+        <i class="fas fa-code w-5"></i>
+        <span class="text-sm font-medium">Code Editor</span>
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400">
+        <i class="fas fa-award w-5"></i>
+        <span class="text-sm font-medium">Certificates</span>
+      </a>
+
+      <div class="text-[10px] font-bold text-gray-600 uppercase tracking-widest mt-6 mb-2 px-2">Extras</div>
+      <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400">
+        <i class="fas fa-route w-5"></i>
+        <span class="text-sm font-medium">Roadmaps</span>
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400">
+        <i class="fas fa-bullseye w-5"></i>
+        <span class="text-sm font-medium">Challenges</span>
+      </a>
+      <a href="#" class="nav-item flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400">
+        <i class="fas fa-users w-5"></i>
+        <span class="text-sm font-medium">Community</span>
+      </a>
+      <a href="#" class="nav-item flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-gray-400">
+        <div class="flex items-center gap-3">
+          <i class="fas fa-robot w-5"></i>
+          <span class="text-sm font-medium">AI Tutor</span>
+        </div>
+        <span class="text-[9px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-bold">New</span>
+      </a>
+    </nav>
+
+    <div class="p-4 mt-auto">
+      <div class="bg-emerald-600/10 border border-emerald-500/20 p-4 rounded-2xl">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center">
+            <i class="fas fa-rocket text-white text-xs"></i>
+          </div>
+          <div>
+            <p class="text-xs font-bold">Start Learning</p>
+            <p class="text-[10px] text-gray-500">Pick up where you left</p>
+          </div>
+        </div>
+        <button
+          class="w-full py-2 bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-bold rounded-lg transition-colors">Resume
+          Path</button>
+      </div>
+    </div>
+  </aside>
+  <div id="overlay" class="fixed inset-0 bg-black/50 hidden z-40"></div>
+
+  <!-- Main Content -->
+  <main class="flex-1 ml-64 p-8">
+    <!-- Header -->
+   <header class="glass-header h-16 fixed top-0 right-0 left-64 md:left-64 left-0 px-4 md:px-8 flex items-center justify-between z-40">
+      <button id="menuBtn" class="md:hidden text-white text-xl">
+  <i class="fas fa-bars"></i>
+</button>
+      <div class="relative w-full md:w-1/2 max-w-lg">
+        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+        <input type="text" placeholder="Search topics (e.g. Python, HTML, JavaScript...)"
+          class="w-full bg-[#1a1b1f] border border-white/5 rounded-xl py-2 pl-12 pr-4 text-sm focus:outline-none focus:border-emerald-500/50 transition-all">
+        <div
+          class="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold text-gray-600 border border-white/10 px-1 rounded uppercase">
+          Ctrl+K</div>
+      </div>
+
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <i class="fas fa-fire text-orange-500"></i>
+          <div class="text-right">
+            <p class="text-[10px] font-bold text-white leading-none">7</p>
+            <p class="text-[9px] text-gray-500 uppercase tracking-tighter">Day Streak</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3 pl-4 border-l border-white/10">
+          <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center font-bold text-xs">YOU</div>
+          <div class="text-sm font-bold flex items-center gap-1 cursor-pointer">
+            You <i class="fas fa-chevron-down text-[10px] text-gray-500"></i>
+          </div>
+        </div>
+      </div>
+       <button id="installBtn" style="display:none;">Install App 📲</button>
+    </header>
+     
+    <br><br><br><br>
+
+    <div class="mt-16 flex gap-8">
+      <!-- Left Column -->
+      <div class="flex-1 space-y-8">
+        <!-- Hero Section -->
+        <section
+          class="relative bg-[#047857]/20 border border-emerald-500/10 rounded-[32px] p-10 overflow-hidden flex items-center justify-between">
+          <div class="relative z-10 max-w-md">
+            <h1 class="text-4xl font-black mb-4 leading-tight">Master New Skills, <br><span
+                class="text-emerald-400">Build Your Future</span> 🚀</h1>
+            <p class="text-gray-400 text-sm mb-8 leading-relaxed font-medium">Learn by doing • Practice with AI • Track
+              your progress</p>
+            <div class="flex gap-4">
+              <button
+                class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold text-sm transition-all flex items-center gap-2 shadow-lg shadow-emerald-500/20">
+                <i class="fas fa-play-circle"></i> Continue Learning
+              </button>
+              <button
+                class="bg-black/40 hover:bg-black/60 text-white px-6 py-3 rounded-xl font-bold text-sm transition-all border border-white/5 flex items-center gap-2">
+                <i class="fas fa-tasks"></i> Take a Quiz
+              </button>
+            </div>
+          </div>
+          <div class="relative w-64 h-64 hidden lg:block">
+            <div class="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full"></div>
+            <img src="https://cdn-icons-png.flaticon.com/512/3063/3063822.png" alt="Hero Illustration"
+              class="relative z-10 w-full drop-shadow-2xl opacity-90">
+          </div>
+        </section>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-4 gap-4">
+          <div class="bg-[#1a1b1f] border border-white/5 p-5 rounded-2xl flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
+              <i class="fas fa-book-open text-blue-500"></i>
+            </div>
+            <div>
+              <p class="text-xl font-bold">12</p>
+              <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Courses Done</p>
+            </div>
+          </div>
+          <div class="bg-[#1a1b1f] border border-white/5 p-5 rounded-2xl flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center">
+              <i class="fas fa-fire text-orange-500"></i>
+            </div>
+            <div>
+              <p class="text-xl font-bold">7</p>
+              <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Day Streak</p>
+            </div>
+          </div>
+          <div class="bg-[#1a1b1f] border border-white/5 p-5 rounded-2xl flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center">
+              <i class="fas fa-trophy text-yellow-500"></i>
+            </div>
+            <div>
+              <p class="text-xl font-bold">850</p>
+              <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">XP Points</p>
+            </div>
+          </div>
+          <div class="bg-[#1a1b1f] border border-white/5 p-5 rounded-2xl flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center">
+              <i class="fas fa-check-circle text-emerald-500"></i>
+            </div>
+            <div>
+              <p class="text-xl font-bold">45</p>
+              <p class="text-[10px] text-gray-500 uppercase font-bold tracking-widest">Quizzes Solved</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Continue Learning -->
+        <section>
+          <div class="flex justify-between items-center mb-6 px-2">
+            <h3 class="text-xl font-bold">Continue Learning</h3>
+            <a href="#" class="text-xs font-bold text-gray-500 hover:text-white flex items-center gap-1">View All <i
+                class="fas fa-arrow-right"></i></a>
+          </div>
+          <div class="grid grid-cols-3 gap-6">
+            <!-- Course Card 1 -->
+            <div class="bg-[#1a1b1f] border border-white/5 rounded-3xl p-6 card-hover transition-all duration-300">
+              <div
+                class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-blue-600/20">
+                <i class="fas fa-code text-white"></i>
+              </div>
+              <h4 class="font-bold mb-1">HTML & CSS</h4>
+              <p class="text-[11px] text-gray-500 mb-6 uppercase font-bold tracking-wider">Beginner • 8 Lessons</p>
+              <div class="flex justify-between text-[10px] font-bold mb-2">
+                <span class="text-emerald-500">75%</span>
+              </div>
+              <div class="w-full bg-white/5 h-1.5 rounded-full mb-6">
+                <div class="bg-emerald-500 h-full w-3/4 rounded-full"></div>
+              </div>
+              <button
+                class="w-full py-3 bg-[#25262b] hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all">Continue</button>
+            </div>
+            <!-- Course Card 2 -->
+            <div class="bg-[#1a1b1f] border border-white/5 rounded-3xl p-6 card-hover transition-all duration-300">
+              <div
+                class="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-emerald-500/20">
+                <i class="fab fa-python text-white"></i>
+              </div>
+              <h4 class="font-bold mb-1">Python Basics</h4>
+              <p class="text-[11px] text-gray-500 mb-6 uppercase font-bold tracking-wider">Beginner • 12 Lessons</p>
+              <div class="flex justify-between text-[10px] font-bold mb-2">
+                <span class="text-emerald-500">42%</span>
+              </div>
+              <div class="w-full bg-white/5 h-1.5 rounded-full mb-6">
+                <div class="bg-emerald-500 h-full w-[42%] rounded-full"></div>
+              </div>
+              <button
+                class="w-full py-3 bg-[#25262b] hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all">Continue</button>
+            </div>
+            <!-- Course Card 3 -->
+            <div class="bg-[#1a1b1f] border border-white/5 rounded-3xl p-6 card-hover transition-all duration-300">
+              <div
+                class="w-12 h-12 bg-yellow-500 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-yellow-500/20">
+                <i class="fab fa-js text-white"></i>
+              </div>
+              <h4 class="font-bold mb-1">JavaScript</h4>
+              <p class="text-[11px] text-gray-500 mb-6 uppercase font-bold tracking-wider">Intermediate • 10 Lessons</p>
+              <div class="flex justify-between text-[10px] font-bold mb-2">
+                <span class="text-emerald-500">20%</span>
+              </div>
+              <div class="w-full bg-white/5 h-1.5 rounded-full mb-6">
+                <div class="bg-emerald-500 h-full w-1/5 rounded-full"></div>
+              </div>
+              <button
+                class="w-full py-3 bg-[#25262b] hover:bg-emerald-500 text-white text-xs font-bold rounded-xl transition-all">Continue</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Practice -->
+        <section>
+          <h3 class="text-xl font-bold mb-6 px-2">Quick Practice</h3>
+          <div class="grid grid-cols-4 gap-4">
+            <div
+              class="bg-[#1a1b1f] border border-white/5 p-5 rounded-2xl group cursor-pointer hover:bg-emerald-500/5 transition-all">
+              <div class="flex items-center gap-3 mb-2">
+                <i class="fas fa-terminal text-xs text-orange-500"></i>
+                <span class="text-xs font-bold">HTML Quiz</span>
+              </div>
+              <p class="text-[10px] text-gray-500 mb-4">Test your knowledge</p>
+              <a href="#"
+                class="text-[10px] font-bold text-emerald-500 flex items-center gap-1 group-hover:gap-2 transition-all">Start
+                <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div
+              class="bg-[#1a1b1f] border border-white/5 p-5 rounded-2xl group cursor-pointer hover:bg-emerald-500/5 transition-all">
+              <div class="flex items-center gap-3 mb-2">
+                <i class="fas fa-object-group text-xs text-blue-500"></i>
+                <span class="text-xs font-bold">CSS Challenge</span>
+              </div>
+              <p class="text-[10px] text-gray-500 mb-4">Code a landing page</p>
+              <a href="#"
+                class="text-[10px] font-bold text-emerald-500 flex items-center gap-1 group-hover:gap-2 transition-all">Start
+                <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div
+              class="bg-[#1a1b1f] border border-white/5 p-5 rounded-2xl group cursor-pointer hover:bg-emerald-500/5 transition-all">
+              <div class="flex items-center gap-3 mb-2">
+                <i class="fas fa-brain text-xs text-yellow-500"></i>
+                <span class="text-xs font-bold">Python Quiz</span>
+              </div>
+              <p class="text-[10px] text-gray-500 mb-4">Functions & Loops</p>
+              <a href="#"
+                class="text-[10px] font-bold text-emerald-500 flex items-center gap-1 group-hover:gap-2 transition-all">Start
+                <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div
+              class="bg-[#1a1b1f] border border-white/5 p-5 rounded-2xl group cursor-pointer hover:bg-emerald-500/5 transition-all">
+              <div class="flex items-center gap-3 mb-2">
+                <i class="fas fa-calculator text-xs text-purple-500"></i>
+                <span class="text-xs font-bold">JS Challenge</span>
+              </div>
+              <p class="text-[10px] text-gray-500 mb-4">Build a calculator</p>
+              <a href="#"
+                class="text-[10px] font-bold text-emerald-500 flex items-center gap-1 group-hover:gap-2 transition-all">Start
+                <i class="fas fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column -->
+      <div class="w-80 space-y-8">
+        <!-- Daily Streak -->
+        <div class="bg-[#1a1b1f] border border-white/5 rounded-[32px] p-8 flex flex-col items-center">
+          <h4 class="text-sm font-bold flex items-center gap-2 mb-8">
+            <i class="fas fa-fire text-orange-500"></i> Daily Streak
+          </h4>
+          <div class="streak-ring mb-6">
+            <svg width="120" height="120">
+              <circle class="bg" cx="60" cy="60" r="50"></circle>
+              <circle class="progress" cx="60" cy="60" r="50"></circle>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <i class="fas fa-fire text-orange-500 text-2xl mb-1"></i>
+              <span class="text-2xl font-black">7</span>
+            </div>
+          </div>
+          <p class="text-xs font-bold text-gray-400">Keep it up! 🔥</p>
+        </div>
+
+        <!-- Calendar -->
+        <div class="bg-[#1a1b1f] border border-white/5 rounded-[32px] p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h4 class="text-xs font-bold uppercase tracking-widest text-gray-500">November 2025</h4>
+            <div class="flex gap-2">
+              <i class="fas fa-chevron-left text-[10px] text-gray-500 cursor-pointer"></i>
+              <i class="fas fa-chevron-right text-[10px] text-gray-500 cursor-pointer"></i>
+            </div>
+          </div>
+          <div class="grid grid-cols-7 gap-1 text-center text-[9px] font-bold text-gray-600 mb-2">
+            <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+          </div>
+          <div class="grid grid-cols-7 gap-y-1 text-center text-[10px] font-medium text-gray-400">
+            <!-- Simplified Calendar -->
+            <span class="p-2 opacity-20">26</span><span class="p-2 opacity-20">27</span><span
+              class="p-2 opacity-20">28</span><span class="p-2 opacity-20">29</span><span
+              class="p-2 opacity-20">30</span><span class="p-2 opacity-20">31</span><span class="p-2">1</span>
+            <span class="p-2">2</span><span class="p-2">3</span><span class="p-2">4</span><span
+              class="p-2 bg-emerald-500 text-white rounded-lg">5</span><span
+              class="p-2 bg-emerald-500 text-white rounded-lg">6</span><span
+              class="p-2 bg-emerald-500 text-white rounded-lg">7</span><span class="p-2">8</span>
+            <span class="p-2">9</span><span class="p-2">10</span><span class="p-2">11</span><span
+              class="p-2">12</span><span class="p-2">13</span><span class="p-2">14</span><span class="p-2">15</span>
+            <span class="p-2">16</span><span class="p-2 text-emerald-500">17</span><span class="p-2">18</span><span
+              class="p-2">19</span><span class="p-2">20</span><span class="p-2">21</span><span class="p-2">22</span>
+            <span class="p-2">23</span><span class="p-2 bg-emerald-500/20 text-emerald-500 rounded-lg">24</span><span
+              class="p-2">25</span><span class="p-2">26</span><span class="p-2">27</span><span
+              class="p-2">28</span><span class="p-2">29</span>
+            <span class="p-2">30</span>
+          </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="bg-[#1a1b1f] border border-white/5 rounded-[32px] p-6">
+          <h4 class="text-sm font-bold flex items-center gap-2 mb-6">
+            <i class="fas fa-crown text-yellow-500 text-xs"></i> Leaderboard
+          </h4>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between group cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-[10px] font-bold text-gray-600">1</span>
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" class="w-7 h-7 rounded-lg bg-gray-800">
+                <div>
+                  <p class="text-xs font-bold">Alex</p>
+                  <p class="text-[9px] text-gray-500">1,250 XP</p>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold text-yellow-500">1,250 XP</span>
+            </div>
+            <div
+              class="flex items-center justify-between bg-emerald-500/10 border border-emerald-500/20 p-2 rounded-xl">
+              <div class="flex items-center gap-3">
+                <span class="text-[10px] font-bold text-emerald-500">2</span>
+                <div class="w-7 h-7 rounded-lg bg-emerald-500 flex items-center justify-center text-[10px] font-bold">
+                  YOU</div>
+                <div>
+                  <p class="text-xs font-bold text-emerald-500">You</p>
+                  <p class="text-[9px] text-emerald-500/60">850 XP</p>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold text-emerald-500">850 XP</span>
+            </div>
+            <div class="flex items-center justify-between group cursor-pointer">
+              <div class="flex items-center gap-3">
+                <span class="text-[10px] font-bold text-gray-600">3</span>
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="w-7 h-7 rounded-lg bg-gray-800">
+                <div>
+                  <p class="text-xs font-bold">Sarah</p>
+                  <p class="text-[9px] text-gray-500">720 XP</p>
+                </div>
+              </div>
+              <span class="text-[10px] font-bold text-gray-500">720 XP</span>
+            </div>
+          </div>
+          <button
+            class="w-full mt-6 py-3 border border-white/5 hover:bg-white/5 text-gray-400 hover:text-white text-[10px] font-bold rounded-xl transition-all">View
+            Full Leaderboard</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+ const menuBtn = document.getElementById('menuBtn');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('overlay');
+
+menuBtn.addEventListener('click', () => {
+  sidebar.classList.toggle('active');
+  overlay.classList.toggle('active');
+});
+
+// Close when clicking outside
+overlay.addEventListener('click', () => {
+  sidebar.classList.remove('active');
+  overlay.classList.remove('active');
+});
+  </script>
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js')
+    .then(() => console.log("SW Registered"));
+}
+</script>
+<script>
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  document.getElementById('installBtn').style.display = 'block';
+});
+
+document.getElementById('installBtn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  }
+});
+</script>
+</body>
+
+</html>
